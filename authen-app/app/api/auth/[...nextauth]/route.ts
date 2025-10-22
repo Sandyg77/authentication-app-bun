@@ -26,6 +26,16 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.GITHUB_CLIENT_SECRET!,
     }),
   ],
+  callbacks: {
+    async session({ session, user }) {
+      // The user object here is the user from your database
+      if (session.user) {
+        session.user.id = user.id;
+        session.user.role = user.role;
+      }
+      return session;
+    },
+  },
   secret: process.env.NEXTAUTH_SECRET, // Secures the entire authentication process
 };
 

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -156,9 +157,8 @@ export default function LoginForm() {
               </div>
 
               {/* Submit Button */}
-              <button
-                type="submit"
-                disabled={isLoading}
+              <Link
+                href={"/homepage"}
                 className="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition duration-200 transform hover:scale-[1.02]"
               >
                 {isLoading ? (
@@ -188,7 +188,7 @@ export default function LoginForm() {
                 ) : (
                   "Sign In"
                 )}
-              </button>
+              </Link>
             </form>
 
             {/* Divider */}

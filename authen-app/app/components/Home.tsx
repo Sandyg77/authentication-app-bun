@@ -114,13 +114,16 @@ export default function HomePage() {
                         />
                         <span>My Profile</span>
                       </button>
-                      <button className="w-full px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-200 flex items-center space-x-3">
+                      <Link
+                        className="w-full px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-200 flex items-center space-x-3"
+                        href={"/settingsPage"}
+                      >
                         <Settings
                           size={18}
                           className="text-purple-600 dark:text-purple-400 flex-shrink-0"
                         />
                         <span>Settings</span>
-                      </button>
+                      </Link>
                     </div>
 
                     {/* Sign Out Button */}
