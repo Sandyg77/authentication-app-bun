@@ -4,10 +4,18 @@ import { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import NextAuth from "next-auth";
 import GitHubProvider from "next-auth/providers/github";
+import clientPromise from "@/lib/mongodb";
+import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 
 // This API endpoint handles the authentication logic
 
 export const authOptions: NextAuthOptions = {
+  adapter: MongoDBAdapter(clientPromise, {
+    databaseName: process.env.MONGODB_DATABASE, // Specify your database name here
+  }),
+  session: {
+    strategy: "database", // Store sessions in the database
+  },
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,

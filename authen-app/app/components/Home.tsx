@@ -2,12 +2,14 @@
 
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { User, Settings, LogOut, ChevronDown, Lock } from "lucide-react";
 
 export default function HomePage() {
-  const { status } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -50,12 +52,101 @@ export default function HomePage() {
               </span>
             </div>
             <div className="flex items-center space-x-4">
-              <button
-                onClick={() => signOut({ callbackUrl: "/" })}
-                className="px-6 py-2.5 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 text-white font-medium shadow-lg hover:shadow-xl hover:from-blue-700 hover:to-purple-700 transition duration-200 transform hover:scale-105"
-              >
-                Sign Out
-              </button>
+              {/* User Avatar with Dropdown */}
+              <div className="relative">
+                <button
+                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                  className="flex items-center space-x-3 px-4 py-2 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition duration-200"
+                >
+                  {/* Avatar */}
+                  <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center overflow-hidden">
+                    {session?.user?.image ? (
+                      <User size={20} className="text-white" />
+                    ) : (
+                      <span className="text-white font-bold text-sm">
+                        {session?.user?.name?.charAt(0).toUpperCase() || "U"}
+                      </span>
+                    )}
+                  </div>
+                  {/* User Name */}
+                  <span className="text-sm font-medium text-gray-900 dark:text-white hidden sm:inline">
+                    {session?.user?.name || "User"}
+                  </span>
+                  {/* Chevron Down */}
+                  <ChevronDown
+                    size={16}
+                    className={`text-gray-500 dark:text-gray-400 transition-transform ${
+                      isDropdownOpen ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+
+                {/* Dropdown Menu */}
+                {isDropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-lg shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden z-50">
+                    {/* User Info Section */}
+                    <div className="px-5 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50">
+                      <div className="flex items-center space-x-3 mb-3">
+                        {/* <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
+                          <User size={20} className="text-white" />
+                        </div> */}
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">
+                            {session?.user?.name || "User"}
+                          </p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                            {session?.user?.email || "user@example.com"}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-1 text-xs text-gray-600 dark:text-gray-300">
+                        <Lock size={12} />
+                        <span>Secure Account</span>
+                      </div>
+                    </div>
+
+                    {/* Menu Items */}
+                    <div className="py-2">
+                      <button className="w-full px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-200 flex items-center space-x-3">
+                        <User
+                          size={18}
+                          className="text-blue-600 dark:text-blue-400 flex-shrink-0"
+                        />
+                        <span>My Profile</span>
+                      </button>
+                      <button className="w-full px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-200 flex items-center space-x-3">
+                        <Settings
+                          size={18}
+                          className="text-purple-600 dark:text-purple-400 flex-shrink-0"
+                        />
+                        <span>Settings</span>
+                      </button>
+                    </div>
+
+                    {/* Sign Out Button */}
+                    <div className="border-t border-gray-200 dark:border-gray-700 p-2">
+                      <button
+                        onClick={() => {
+                          setIsDropdownOpen(false);
+                          signOut({ callbackUrl: "/" });
+                        }}
+                        className="w-full px-4 py-2.5 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition duration-200 rounded-lg font-medium flex items-center space-x-3"
+                      >
+                        <LogOut size={18} className="flex-shrink-0" />
+                        <span>Sign Out</span>
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Close dropdown when clicking outside */}
+              {isDropdownOpen && (
+                <div
+                  className="fixed inset-0"
+                  onClick={() => setIsDropdownOpen(false)}
+                />
+              )}
             </div>
           </div>
         </nav>
