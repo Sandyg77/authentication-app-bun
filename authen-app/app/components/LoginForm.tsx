@@ -268,9 +268,5 @@ export default function LoginForm() {
       </div>
     );
   }
-  return (
-    <div className="min-h-screen flex items-center justify-center">
-      <p className="text-red-600">You are not authenticated. Please log in.</p>
-    </div>
-  );
+  return null;
 }
